@@ -2,6 +2,12 @@ version: '2'
 services:
   db:
     image: postgres
+    networks:
+      - net1
+  cache:
+    image: redis
+    networks:
+      - net2
   web:
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
@@ -11,3 +17,13 @@ services:
       - "3000:3000"
     depends_on:
       - db
+      - cache
+    networks:
+      - net1
+      - net2
+
+networks:
+  net1:
+    driver: bridge
+  net2:
+    driver: bridge
